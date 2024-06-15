@@ -3,29 +3,34 @@ using UnityEngine;
 
 public class BoardView : MonoBehaviour
 {
-    private readonly float cellViewSpace = 0.1f;
-    private readonly Vector2 cellViewSize = Vector2.one;
-    private readonly int row = 4;
-    private readonly int col = 4;
+    private readonly float slotInterval = 0.1f;
+    private readonly Vector2 slotSize = Vector2.one;
 
-    [SerializeField] private GameObject cellBgPrefab;
+    [SerializeField] private CellSlotView slotPrefab;
     [SerializeField] private Vector2 leftTopPos = new(-1.75f, 1.75f);
 
-    public readonly List<GameObject> cellViewList = new();
+    public readonly List<CellSlotView> slots = new();
 
-    private void Start()
+    public void Init()
     {
-        for (int i = 0; i < row; i++)
-            for (int j = 0; j < col; j++)
+        for (int i = 0; i < Board.row; i++)
+            for (int j = 0; j < Board.col; j++)
             {
                 var pos = leftTopPos
-                    + Vector2.right * ((1 + i) * cellViewSpace)
-                    + Vector2.right * i * cellViewSize.x
-                    + Vector2.down * ((1 + j) * cellViewSpace)
-                    + Vector2.down * j * cellViewSize.y;
+                    + Vector2.right * ((1 + i) * slotInterval)
+                    + Vector2.right * i * slotSize.x
+                    + Vector2.down * ((1 + j) * slotInterval)
+                    + Vector2.down * j * slotSize.y;
 
-                var cellView = Instantiate(cellBgPrefab, pos, Quaternion.identity, transform);
-                cellViewList.Add(cellView);
+                var slot = Instantiate(slotPrefab, pos, Quaternion.identity, transform);
+                slot.Init(new Vector2Int(i, j));
+                slots.Add(slot);
             }
+    }
+
+    public void SetPosition(Cell cell)
+    {
+        var pos = slots.Find(s => s.CellPos == cell.cellPos).transform.position;
+        cell.transform.position = pos;
     }
 }
