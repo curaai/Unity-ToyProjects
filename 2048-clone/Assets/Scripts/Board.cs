@@ -1,22 +1,36 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    public static readonly int row = 4;
-    public static readonly int col = 4;
+    public static readonly int size = 4;
 
     [SerializeField] private BoardView view;
     [SerializeField] private Cell cellPrefab;
 
+    private int[,] values = new int[size, size];
+    private Cell[,] cells = new Cell[size, size];
+    private BoardHelper helper;
+
     void Start()
     {
-        view.Init();
+        helper = new BoardHelper(values, cells);
 
-        var a = Instantiate(cellPrefab, transform);
-        a.Init(Vector2Int.one, 2);
-        view.SetPosition(a);
-        var b = Instantiate(cellPrefab, transform);
-        b.Init(Vector2Int.one * 2, 4);
-        view.SetPosition(b);
+        view.Init(size);
+
+        GenerateRandomCell();
+        GenerateRandomCell();
+    }
+
+    public void GenerateRandomCell()
+    {
+        // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
+        var cpos = helper.FindEmptyIndexes().PickRandom();
+        var cell = Instantiate(cellPrefab, view.transform);
+        cell.Init(cpos, 2);
+        view.SetPosition(cell);
+
+        cells[cpos.x, cpos.y] = cell;
+        values[cpos.x, cpos.y] = cell.value;
     }
 }
