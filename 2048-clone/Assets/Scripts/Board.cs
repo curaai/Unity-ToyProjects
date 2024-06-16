@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,16 +44,31 @@ public class Board : MonoBehaviour
         if (direction.magnitude != 1 || direction.x == direction.y)
             return;
 
-        cellList.ForEach(c => Move(c, helper.NavigateCell(c, direction)));
+        OrderCellsByDirection(direction).ForEach(Move);
 
-        void Move(Cell c, Vector2Int dst)
+        void Move(Cell c)
         {
+            var dst = helper.NavigateCell(c, direction);
             cells[c.cellPos.x, c.cellPos.y] = null;
             values[c.cellPos.x, c.cellPos.y] = 0;
             cells[dst.x, dst.y] = c;
             values[dst.x, dst.y] = c.value;
             c.cellPos = dst;
             view.SetPosition(c);
+        }
+
+        List<Cell> OrderCellsByDirection(Vector2Int direction)
+        {
+            List<Cell> ordered;
+            if (direction.x != 0)
+                ordered = cellList.OrderBy(c => c.cellPos.x).ToList();
+            else
+                ordered = cellList.OrderBy(c => c.cellPos.y).ToList();
+
+            if (direction.x == 1 || direction.y == 1)
+                ordered.Reverse();
+
+            return ordered;
         }
     }
 }
