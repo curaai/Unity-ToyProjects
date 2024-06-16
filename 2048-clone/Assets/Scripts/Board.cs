@@ -31,7 +31,7 @@ public class Board : MonoBehaviour
         // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
         var cpos = helper.FindEmptyIndexes().PickRandom();
         var cell = Instantiate(cellPrefab, view.transform);
-        cell.Init(cpos, 2);
+        cell.Set(cpos, 2);
         view.SetPosition(cell);
 
         cells[cpos.x, cpos.y] = cell;
@@ -45,16 +45,35 @@ public class Board : MonoBehaviour
             return;
 
         OrderCellsByDirection(direction).ForEach(Move);
+        GenerateRandomCell();
 
         void Move(Cell c)
         {
             var dst = helper.NavigateCell(c, direction);
+
+            // Clear
             cells[c.cellPos.x, c.cellPos.y] = null;
             values[c.cellPos.x, c.cellPos.y] = 0;
-            cells[dst.x, dst.y] = c;
-            values[dst.x, dst.y] = c.value;
-            c.cellPos = dst;
-            view.SetPosition(c);
+
+            if (cells[dst.x, dst.y] != null)
+            {
+                Merge(c, cells[dst.x, dst.y]);
+            }
+            else
+            {
+                cells[dst.x, dst.y] = c;
+                values[dst.x, dst.y] = c.value;
+                c.cellPos = dst;
+                view.SetPosition(c);
+            }
+        }
+
+        void Merge(Cell from, Cell to)
+        {
+            cellList.Remove(from);
+            to.Set(to.cellPos, to.value * 2);
+
+            Destroy(from.gameObject);
         }
 
         List<Cell> OrderCellsByDirection(Vector2Int direction)

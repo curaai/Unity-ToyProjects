@@ -7,7 +7,7 @@ public class Cell : MonoBehaviour
     public Vector2Int cellPos;
     public int value;
 
-    public void Init(Vector2Int _cellPos, int _value)
+    public void Set(Vector2Int _cellPos, int _value)
     {
         cellPos = _cellPos;
         value = _value;
