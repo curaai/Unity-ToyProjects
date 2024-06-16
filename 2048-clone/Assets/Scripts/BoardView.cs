@@ -8,7 +8,7 @@ public class BoardView : MonoBehaviour
     private readonly Vector2 slotSize = Vector2.one;
 
     [SerializeField] private CellSlotView slotPrefab;
-    [SerializeField] private Vector2 leftTopPos = new(-1.75f, 1.75f);
+    [SerializeField] private Vector2 leftBotPos = new(-1.75f, -1.75f);
 
     public CellSlotView[,] slots;
 
@@ -19,11 +19,11 @@ public class BoardView : MonoBehaviour
         var _range = Enumerable.Range(0, size).ToList();
         foreach ((var i, var j) in LinqUtil.Permutation(_range, _range))
         {
-            var worldPos = leftTopPos
+            var worldPos = leftBotPos
                 + Vector2.right * ((1 + i) * slotInterval)
                 + Vector2.right * i * slotSize.x
-                + Vector2.down * ((1 + j) * slotInterval)
-                + Vector2.down * j * slotSize.y;
+                + Vector2.up * ((1 + j) * slotInterval)
+                + Vector2.up * j * slotSize.y;
 
             var slot = Instantiate(slotPrefab, worldPos, Quaternion.identity, transform);
             slot.Init(new Vector2Int(i, j));

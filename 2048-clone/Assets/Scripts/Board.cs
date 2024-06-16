@@ -11,6 +11,7 @@ public class Board : MonoBehaviour
 
     private int[,] values = new int[size, size];
     private Cell[,] cells = new Cell[size, size];
+    private List<Cell> cellList = new();
     private BoardHelper helper;
 
     void Start()
@@ -34,6 +35,7 @@ public class Board : MonoBehaviour
 
         cells[cpos.x, cpos.y] = cell;
         values[cpos.x, cpos.y] = cell.value;
+        cellList.Add(cell);
     }
 
     public void Shift(Vector2Int direction)
@@ -41,6 +43,16 @@ public class Board : MonoBehaviour
         if (direction.magnitude != 1 || direction.x == direction.y)
             return;
 
-        Debug.Log("Input: " + direction.ToString());
+        cellList.ForEach(c => Move(c, helper.NavigateCell(c, direction)));
+
+        void Move(Cell c, Vector2Int dst)
+        {
+            cells[c.cellPos.x, c.cellPos.y] = null;
+            values[c.cellPos.x, c.cellPos.y] = 0;
+            cells[dst.x, dst.y] = c;
+            values[dst.x, dst.y] = c.value;
+            c.cellPos = dst;
+            view.SetPosition(c);
+        }
     }
 }
