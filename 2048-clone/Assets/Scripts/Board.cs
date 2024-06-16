@@ -27,6 +27,10 @@ public class Board : MonoBehaviour
         CreateCell(Vector2Int.zero);
         CreateCell(new Vector2Int(0, 1));
         CreateCell(new Vector2Int(0, 2));
+
+        // Test
+        var last = cellList.Last();
+        last.Set(last.cellPos, 4);
         // GenerateRandomCell();
         // GenerateRandomCell();
     }
@@ -58,21 +62,15 @@ public class Board : MonoBehaviour
 
         YieldCollection yields = new();
         List<Cell> mergeCells = new();
-        List<Cell> mergedCells = new();
 
         StartCoroutine(f());
         IEnumerator f()
         {
             movingNow = true;
 
+            cellList.ForEach(c => c.mergeable = true);
             OrderCellsByDirection(direction).ForEach(Move);
             yield return yields;
-
-            foreach (var x in mergedCells)
-            {
-                x.Merged();
-                values[x.cellPos.x, x.cellPos.y] *= 2;
-            }
 
             foreach (var x in mergeCells)
                 Destroy(x.gameObject);
@@ -103,9 +101,11 @@ public class Board : MonoBehaviour
         void Merge(Cell from, Cell to)
         {
             from.transform.position += Vector3.back;
+            to.Merged();
+            to.mergeable = false;
+            values[to.cellPos.x, to.cellPos.y] *= 2;
             cellList.Remove(from);
             mergeCells.Add(from);
-            mergedCells.Add(to);
         }
 
         List<Cell> OrderCellsByDirection(Vector2Int direction)

@@ -39,8 +39,8 @@ public class BoardHelper
             var value = values[nextpos.x, nextpos.y];
             if (value != 0)
             {
-                // mergeable
-                if (value == cell.value)
+                var mergeable = cells[nextpos.x, nextpos.y].mergeable && cell.mergeable;
+                if (mergeable && value == cell.value)
                     return nextpos;
                 else
                     return curpos;

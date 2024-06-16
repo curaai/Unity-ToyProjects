@@ -8,6 +8,7 @@ public class Cell : MonoBehaviour
 
     public Vector2Int cellPos;
     public int value;
+    public bool mergeable;
 
     public void Set(Vector2Int _cellPos, int _value)
     {
