@@ -24,20 +24,27 @@ public class Board : MonoBehaviour
 
         view.Init(size);
 
-        GenerateRandomCell();
-        GenerateRandomCell();
+        CreateCell(Vector2Int.zero);
+        CreateCell(new Vector2Int(0, 1));
+        CreateCell(new Vector2Int(0, 2));
+        // GenerateRandomCell();
+        // GenerateRandomCell();
     }
 
     public void GenerateRandomCell()
     {
         // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
-        var cpos = helper.FindEmptyIndexes().PickRandom();
+        CreateCell(helper.FindEmptyIndexes().PickRandom());
+    }
+
+    public void CreateCell(Vector2Int pos)
+    {
         var cell = Instantiate(cellPrefab, view.transform);
-        cell.Set(cpos, 2);
+        cell.Set(pos, 2);
         view.SetPosition(cell);
 
-        cells[cpos.x, cpos.y] = cell;
-        values[cpos.x, cpos.y] = cell.value;
+        cells[pos.x, pos.y] = cell;
+        values[pos.x, pos.y] = cell.value;
         cellList.Add(cell);
     }
 
@@ -61,14 +68,14 @@ public class Board : MonoBehaviour
             OrderCellsByDirection(direction).ForEach(Move);
             yield return yields;
 
-            foreach (var x in mergeCells)
-                Destroy(x.gameObject);
-
             foreach (var x in mergedCells)
             {
-                x.Set(x.cellPos, x.value * 2);
+                x.Merged();
                 values[x.cellPos.x, x.cellPos.y] *= 2;
             }
+
+            foreach (var x in mergeCells)
+                Destroy(x.gameObject);
 
             yield return null;
 

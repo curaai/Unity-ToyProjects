@@ -4,6 +4,7 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     [SerializeField] private CellView view;
+    [SerializeField] private Animator anim;
 
     public Vector2Int cellPos;
     public int value;
@@ -27,5 +28,11 @@ public class Cell : MonoBehaviour
             yield return null;
         }
         transform.position = dstPos;
+    }
+
+    public void Merged()
+    {
+        anim.SetTrigger("merge");
+        Set(cellPos, value * 2);
     }
 }
