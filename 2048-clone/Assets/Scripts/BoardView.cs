@@ -36,4 +36,9 @@ public class BoardView : MonoBehaviour
         var slot = slots[cell.cellPos.x, cell.cellPos.y];
         cell.transform.position = slot.transform.position;
     }
+
+    public Vector3 GetWorldPos(Vector2Int cellPos)
+    {
+        return slots[cellPos.x, cellPos.y].transform.position;
+    }
 }
