@@ -554,6 +554,7 @@ GameObject:
   - component: {fileID: 1936230451}
   - component: {fileID: 1936230452}
   - component: {fileID: 1936230453}
+  - component: {fileID: 1936230454}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -605,6 +606,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   view: {fileID: 1936230452}
   cellPrefab: {fileID: -8604524641118812786, guid: 13effb001b0f92f46ae0f0b9f507db3e, type: 3}
+  input: {fileID: 1936230454}
+--- !u!114 &1936230454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936230449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4f1b1aa0d7b18408fe69d134366da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

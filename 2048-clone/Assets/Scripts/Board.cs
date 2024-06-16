@@ -7,6 +7,7 @@ public class Board : MonoBehaviour
 
     [SerializeField] private BoardView view;
     [SerializeField] private Cell cellPrefab;
+    [SerializeField] private InputManager input;
 
     private int[,] values = new int[size, size];
     private Cell[,] cells = new Cell[size, size];
@@ -15,6 +16,7 @@ public class Board : MonoBehaviour
     void Start()
     {
         helper = new BoardHelper(values, cells);
+        input.onInput += Shift;
 
         view.Init(size);
 
@@ -32,5 +34,13 @@ public class Board : MonoBehaviour
 
         cells[cpos.x, cpos.y] = cell;
         values[cpos.x, cpos.y] = cell.value;
+    }
+
+    public void Shift(Vector2Int direction)
+    {
+        if (direction.magnitude != 1 || direction.x == direction.y)
+            return;
+
+        Debug.Log("Input: " + direction.ToString());
     }
 }
