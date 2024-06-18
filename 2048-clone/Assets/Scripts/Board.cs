@@ -24,15 +24,8 @@ public class Board : MonoBehaviour
 
         view.Init(size);
 
-        CreateCell(Vector2Int.zero);
-        CreateCell(new Vector2Int(0, 1));
-        CreateCell(new Vector2Int(0, 2));
-
-        // Test
-        var last = cellList.Last();
-        last.Set(last.cellPos, 4);
-        // GenerateRandomCell();
-        // GenerateRandomCell();
+        GenerateRandomCell();
+        GenerateRandomCell();
     }
 
     public void GenerateRandomCell()
