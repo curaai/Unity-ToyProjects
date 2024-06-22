@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class InputManager : MonoBehaviour
 {
     public UnityAction<Vector2Int> onInput;
+    public UnityAction onUndo;
 
     private void Update()
     {
@@ -15,5 +16,7 @@ public class InputManager : MonoBehaviour
             onInput.Invoke(Vector2Int.right);
         else if (Input.GetKeyDown(KeyCode.W))
             onInput.Invoke(Vector2Int.up);
+        else if (Input.GetKeyDown(KeyCode.R))
+            onUndo.Invoke();
     }
 }

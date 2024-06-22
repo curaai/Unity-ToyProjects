@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class BoardHelper
 {
-    private int[,] values;
-    private Cell[,] cells;
     private int size;
+    private Board board;
 
     private List<Vector2Int> indices;
 
-    public BoardHelper(int[,] _values, Cell[,] _cells)
+    public BoardHelper(Board _board)
     {
-        this.values = _values;
-        this.cells = _cells;
-        size = values.GetLength(0);
+        this.board = _board;
+        size = board.values.GetLength(0);
 
         var _range = Enumerable.Range(0, size).ToList();
         indices = LinqUtil.Permutation(_range, _range)
@@ -23,7 +21,7 @@ public class BoardHelper
 
     public List<Vector2Int> FindEmptyIndexes()
     {
-        return indices.Where(i => values[i.x, i.y] == 0).ToList();
+        return indices.Where(i => board.values[i.x, i.y] == 0).ToList();
     }
 
     public Vector2Int NavigateCell(Cell cell, Vector2Int direction)
@@ -36,10 +34,11 @@ public class BoardHelper
             if (OutOfBoard(nextpos))
                 return curpos;
 
-            var value = values[nextpos.x, nextpos.y];
+            var value = board.values[nextpos.x, nextpos.y];
             if (value != 0)
             {
-                var mergeable = cells[nextpos.x, nextpos.y].mergeable && cell.mergeable;
+                var mergeable = board.cells[nextpos.x, nextpos.y].mergeable
+                    && cell.mergeable;
                 if (mergeable && value == cell.value)
                     return nextpos;
                 else

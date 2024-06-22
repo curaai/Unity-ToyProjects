@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 public class Board : MonoBehaviour
 {
@@ -11,21 +12,25 @@ public class Board : MonoBehaviour
     [SerializeField] private Cell cellPrefab;
     [SerializeField] private InputManager input;
 
-    private int[,] values = new int[size, size];
-    private Cell[,] cells = new Cell[size, size];
-    private List<Cell> cellList = new();
+    public int[,] values = new int[size, size];
+    public Cell[,] cells = new Cell[size, size];
+    public List<Cell> cellList = new();
     private BoardHelper helper;
+    private UndoManager undo;
     private bool movingNow;
 
     void Start()
     {
-        helper = new BoardHelper(values, cells);
+        undo = new UndoManager(this);
+        helper = new BoardHelper(this);
         input.onInput += Shift;
+        input.onUndo += Undo;
 
         view.Init(size);
 
         GenerateRandomCell();
         GenerateRandomCell();
+        undo.Capture(values);
     }
 
     public void GenerateRandomCell()
@@ -34,10 +39,10 @@ public class Board : MonoBehaviour
         CreateCell(helper.FindEmptyIndexes().PickRandom());
     }
 
-    public void CreateCell(Vector2Int pos)
+    public void CreateCell(Vector2Int pos, int value = 2, bool newCell = true)
     {
         var cell = Instantiate(cellPrefab, view.transform);
-        cell.Set(pos, 2);
+        cell.Set(pos, value, newCell);
         view.SetPosition(cell);
 
         cells[pos.x, pos.y] = cell;
@@ -52,6 +57,8 @@ public class Board : MonoBehaviour
             return;
         if (movingNow)
             return;
+
+        undo.Capture(values);
 
         YieldCollection yields = new();
         List<Cell> mergeCells = new();
@@ -81,7 +88,8 @@ public class Board : MonoBehaviour
             if (c.cellPos == dst)
                 return;
 
-            ClearCell(c.cellPos);
+            cells[c.cellPos.x, c.cellPos.y] = null;
+            values[c.cellPos.x, c.cellPos.y] = 0;
 
             if (cells[dst.x, dst.y] != null)
                 Merge(c, cells[dst.x, dst.y]);
@@ -116,16 +124,17 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void ClearCell(Vector2Int pos)
-    {
-        cells[pos.x, pos.y] = null;
-        values[pos.x, pos.y] = 0;
-    }
-
     private void Set(Cell c, Vector2Int pos)
     {
         cells[pos.x, pos.y] = c;
         values[pos.x, pos.y] = c.value;
         c.cellPos = pos;
+    }
+
+    private void Undo()
+    {
+        if (movingNow) return;
+
+        undo.Perform(values, cells);
     }
 }

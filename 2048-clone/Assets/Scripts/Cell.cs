@@ -10,8 +10,11 @@ public class Cell : MonoBehaviour
     public int value;
     public bool mergeable;
 
-    public void Set(Vector2Int _cellPos, int _value)
+    public void Set(Vector2Int _cellPos, int _value, bool created)
     {
+        if (created)
+            anim.SetTrigger("creation");
+
         cellPos = _cellPos;
         value = _value;
         view.Set(this);
@@ -34,6 +37,6 @@ public class Cell : MonoBehaviour
     public void Merged()
     {
         anim.SetTrigger("merge");
-        Set(cellPos, value * 2);
+        Set(cellPos, value * 2, false);
     }
 }
