@@ -6,6 +6,7 @@ using UnityEngine;
 public class UndoManager
 {
     private int[,] old;
+    private int score;
 
     private Board board;
 
@@ -17,6 +18,7 @@ public class UndoManager
 
     public void Capture(int[,] _value)
     {
+        score = board.score.value;
         Array.Copy(_value, old, old.Length);
     }
 
@@ -37,5 +39,7 @@ public class UndoManager
                     board.CreateCell(new Vector2Int(i, j), x, newCell: false);
             }
         }
+
+        board.score.value = score;
     }
 }

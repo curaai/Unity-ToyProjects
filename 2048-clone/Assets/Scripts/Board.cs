@@ -15,16 +15,19 @@ public class Board : MonoBehaviour
     public int[,] values = new int[size, size];
     public Cell[,] cells = new Cell[size, size];
     public List<Cell> cellList = new();
-    private BoardHelper helper;
-    private UndoManager undo;
     private bool movingNow;
     private List<Vector2Int> availableInput;
     public Action gameovered;
+
+    public Score score = new();
+    private BoardHelper helper;
+    private UndoManager undo;
 
     void Start()
     {
         undo = new UndoManager(this);
         helper = new BoardHelper(this);
+
         input.onInput += Shift;
         input.onUndo += Undo;
 
@@ -38,11 +41,7 @@ public class Board : MonoBehaviour
     public void GenerateRandomCell()
     {
         CreateCell(helper.FindEmptyIndexes().PickRandom());
-
-        // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
-        availableInput = helper.AvailableShifts();
-        if (availableInput.Count == 0)
-            gameovered?.Invoke();
+        Refresh();
     }
 
     public void CreateCell(Vector2Int pos, int value = 2, bool newCell = true)
@@ -73,7 +72,7 @@ public class Board : MonoBehaviour
             movingNow = true;
 
             cellList.ForEach(c => c.mergeable = true);
-            OrderCellsByDirection(direction).ForEach(Move);
+            helper.OrderCellsByDirection(direction).ForEach(Move);
             yield return yields;
 
             foreach (var x in mergeCells)
@@ -108,31 +107,25 @@ public class Board : MonoBehaviour
             from.transform.position += Vector3.back;
             to.Merged();
             to.mergeable = false;
+            score.value += to.value;
             values[to.cellPos.x, to.cellPos.y] *= 2;
             cellList.Remove(from);
             mergeCells.Add(from);
         }
 
-        List<Cell> OrderCellsByDirection(Vector2Int direction)
+        void Set(Cell c, Vector2Int pos)
         {
-            List<Cell> ordered;
-            if (direction.x != 0)
-                ordered = cellList.OrderBy(c => c.cellPos.x).ToList();
-            else
-                ordered = cellList.OrderBy(c => c.cellPos.y).ToList();
-
-            if (direction.x == 1 || direction.y == 1)
-                ordered.Reverse();
-
-            return ordered;
+            cells[pos.x, pos.y] = c;
+            values[pos.x, pos.y] = c.value;
+            c.cellPos = pos;
         }
     }
 
-    private void Set(Cell c, Vector2Int pos)
+    private void Refresh()
     {
-        cells[pos.x, pos.y] = c;
-        values[pos.x, pos.y] = c.value;
-        c.cellPos = pos;
+        availableInput = helper.AvailableShifts();
+        if (availableInput.Count == 0)
+            gameovered?.Invoke();
     }
 
     private void Undo()
@@ -140,6 +133,7 @@ public class Board : MonoBehaviour
         if (movingNow) return;
 
         undo.Perform(values, cells);
+        Refresh();
     }
 
     public void RestartGame()

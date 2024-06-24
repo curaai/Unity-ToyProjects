@@ -85,6 +85,20 @@ public class BoardHelper
         return board.values[pos.x, pos.y];
     }
 
+    public List<Cell> OrderCellsByDirection(Vector2Int direction)
+    {
+        List<Cell> ordered;
+        if (direction.x != 0)
+            ordered = board.cellList.OrderBy(c => c.cellPos.x).ToList();
+        else
+            ordered = board.cellList.OrderBy(c => c.cellPos.y).ToList();
+
+        if (direction.x == 1 || direction.y == 1)
+            ordered.Reverse();
+
+        return ordered;
+    }
+
     public void Test_FillImpossible()
     {
         var values = new List<int>()
