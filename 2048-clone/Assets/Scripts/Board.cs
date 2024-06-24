@@ -18,6 +18,7 @@ public class Board : MonoBehaviour
     private BoardHelper helper;
     private UndoManager undo;
     private bool movingNow;
+    private List<Vector2Int> availableInput;
 
     void Start()
     {
@@ -35,8 +36,12 @@ public class Board : MonoBehaviour
 
     public void GenerateRandomCell()
     {
-        // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
         CreateCell(helper.FindEmptyIndexes().PickRandom());
+
+        // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
+        availableInput = helper.AvailableShifts();
+        if (availableInput.Count == 0)
+            throw new NotImplementedException("TODO: Game OVER");
     }
 
     public void CreateCell(Vector2Int pos, int value = 2, bool newCell = true)
@@ -52,11 +57,9 @@ public class Board : MonoBehaviour
 
     public void Shift(Vector2Int direction)
     {
-        // TODO: 현재 움직일수 없는 방향으로 입력됐을 때 무시
-        if (direction.magnitude != 1 || direction.x == direction.y)
-            return;
-        if (movingNow)
-            return;
+        if (!availableInput.Contains(direction)) return;
+        if (direction.magnitude != 1 || direction.x == direction.y) return;
+        if (movingNow) return;
 
         undo.Capture(values);
 

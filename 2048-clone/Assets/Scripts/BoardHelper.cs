@@ -53,4 +53,34 @@ public class BoardHelper
             return false;
         }
     }
+
+    public List<Vector2Int> AvailableShifts()
+    {
+        return board.cellList.SelectMany(AvailableShift).ToHashSet().ToList();
+
+        List<Vector2Int> AvailableShift(Cell c)
+        {
+            List<Vector2Int> shifts = new() {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right,
+            };
+
+            return shifts.Where(s =>
+            {
+                var x = Get(c.cellPos + s);
+                return x.Equals(0) || x.Equals(c.value);
+            }).ToList();
+        }
+
+        int? Get(Vector2Int pos)
+        {
+            if (pos.x < 0 || pos.y < 0)
+                return null;
+            if (size <= pos.x || size <= pos.y)
+                return null;
+            return board.values[pos.x, pos.y];
+        }
+    }
 }
