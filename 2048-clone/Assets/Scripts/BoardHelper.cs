@@ -69,18 +69,35 @@ public class BoardHelper
 
             return shifts.Where(s =>
             {
-                var x = Get(c.cellPos + s);
+                var x = GetValue(c.cellPos + s);
                 return x.Equals(0) || x.Equals(c.value);
             }).ToList();
         }
 
-        int? Get(Vector2Int pos)
+    }
+
+    private int? GetValue(Vector2Int pos)
+    {
+        if (pos.x < 0 || pos.y < 0)
+            return null;
+        if (size <= pos.x || size <= pos.y)
+            return null;
+        return board.values[pos.x, pos.y];
+    }
+
+    public void Test_FillImpossible()
+    {
+        var values = new List<int>()
         {
-            if (pos.x < 0 || pos.y < 0)
-                return null;
-            if (size <= pos.x || size <= pos.y)
-                return null;
-            return board.values[pos.x, pos.y];
-        }
+            4,2,4,2,
+            2,4,2,4,
+            4,2,4,2,
+            2,4,2,4,
+        };
+        indices.Zip(values, (p, v) =>
+        {
+            board.CreateCell(p, v, true);
+            return 0;
+        });
     }
 }

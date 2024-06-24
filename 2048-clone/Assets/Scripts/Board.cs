@@ -19,6 +19,7 @@ public class Board : MonoBehaviour
     private UndoManager undo;
     private bool movingNow;
     private List<Vector2Int> availableInput;
+    public Action gameovered;
 
     void Start()
     {
@@ -41,7 +42,7 @@ public class Board : MonoBehaviour
         // TODO: 빈 셀이 없을 때 게임종료 조건 추가 
         availableInput = helper.AvailableShifts();
         if (availableInput.Count == 0)
-            throw new NotImplementedException("TODO: Game OVER");
+            gameovered?.Invoke();
     }
 
     public void CreateCell(Vector2Int pos, int value = 2, bool newCell = true)
@@ -139,5 +140,10 @@ public class Board : MonoBehaviour
         if (movingNow) return;
 
         undo.Perform(values, cells);
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
     }
 }
