@@ -16,30 +16,32 @@ public class UndoManager
         old = new int[Board.size, Board.size];
     }
 
-    public void Capture(int[,] _value)
+    public void Capture()
     {
         score = board.score.value;
-        Array.Copy(_value, old, old.Length);
+        Array.Clear(old, 0, old.Length);
+        board.cellList.ForEach(c => old[c.cellPos.x, c.cellPos.y] = c.value);
     }
 
-    public void Perform(int[,] _value, Cell[,] _cell)
+    public void Perform()
     {
         foreach (var x in board.cellList)
             GameObject.Destroy(x.gameObject);
+
         board.cellList.Clear();
 
-        Array.Copy(old, _value, _value.Length);
+        ValidPosList().ForEach(p =>
+            board.CreateCell(new(p.i, p.j), old[p.i, p.j], newCell: false));
 
-        for (int i = 0; i < old.GetLength(0); i++)
+        List<(int i, int j)> ValidPosList()
         {
-            for (int j = 0; j < old.GetLength(1); j++)
-            {
-                var x = old[i, j];
-                if (x != 0)
-                    board.CreateCell(new Vector2Int(i, j), x, newCell: false);
-            }
-        }
+            var res = new List<(int i, int j)>();
 
-        board.score.value = score;
+            for (int i = 0; i < old.GetLength(0); i++)
+                for (int j = 0; j < old.GetLength(1); j++)
+                    if (old[i, j] != 0)
+                        res.Add((i, j));
+            return res;
+        }
     }
 }

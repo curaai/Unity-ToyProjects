@@ -12,7 +12,7 @@ public class BoardHelper
     public BoardHelper(Board _board)
     {
         this.board = _board;
-        size = board.values.GetLength(0);
+        size = Board.size;
 
         var _range = Enumerable.Range(0, size).ToList();
         indices = LinqUtil.Permutation(_range, _range)
@@ -21,7 +21,7 @@ public class BoardHelper
 
     public List<Vector2Int> FindEmptyIndexes()
     {
-        return indices.Where(i => board.values[i.x, i.y] == 0).ToList();
+        return indices.Where(i => board.Get(i) == null).ToList();
     }
 
     public Vector2Int NavigateCell(Cell cell, Vector2Int direction)
@@ -34,12 +34,12 @@ public class BoardHelper
             if (OutOfBoard(nextpos))
                 return curpos;
 
-            var value = board.values[nextpos.x, nextpos.y];
-            if (value != 0)
+            var value = GetValue(nextpos);
+            if (value.HasValue && value.Value != 0)
             {
-                var mergeable = board.cells[nextpos.x, nextpos.y].mergeable
+                var mergeable = board.Get(nextpos).mergeable
                     && cell.mergeable;
-                if (mergeable && value == cell.value)
+                if (mergeable && value.Value == cell.value)
                     return nextpos;
                 else
                     return curpos;
@@ -70,10 +70,9 @@ public class BoardHelper
             return shifts.Where(s =>
             {
                 var x = GetValue(c.cellPos + s);
-                return x.Equals(0) || x.Equals(c.value);
+                return !x.HasValue || x.Equals(c.value);
             }).ToList();
         }
-
     }
 
     private int? GetValue(Vector2Int pos)
@@ -82,7 +81,7 @@ public class BoardHelper
             return null;
         if (size <= pos.x || size <= pos.y)
             return null;
-        return board.values[pos.x, pos.y];
+        return board.Get(pos)?.value;
     }
 
     public List<Cell> OrderCellsByDirection(Vector2Int direction)
