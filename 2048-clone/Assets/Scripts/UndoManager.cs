@@ -27,11 +27,12 @@ public class UndoManager
     {
         foreach (var x in board.cellList)
             GameObject.Destroy(x.gameObject);
-
         board.cellList.Clear();
 
         ValidPosList().ForEach(p =>
             board.CreateCell(new(p.i, p.j), old[p.i, p.j], newCell: false));
+
+        board.score.value = score;
 
         List<(int i, int j)> ValidPosList()
         {

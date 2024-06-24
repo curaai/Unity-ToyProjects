@@ -33,13 +33,12 @@ public class Board : MonoBehaviour
 
         GenerateRandomCell();
         GenerateRandomCell();
+        undo.Capture();
     }
 
     public void GenerateRandomCell()
     {
         CreateCell(helper.FindEmptyIndexes().PickRandom());
-        Refresh();
-        undo.Capture();
     }
 
     public void CreateCell(Vector2Int pos, int value = 2, bool newCell = true)
@@ -49,6 +48,7 @@ public class Board : MonoBehaviour
         view.SetPosition(cell);
 
         cellList.Add(cell);
+        Refresh();
     }
 
     public void Shift(Vector2Int direction)
@@ -64,6 +64,8 @@ public class Board : MonoBehaviour
         IEnumerator f()
         {
             movingNow = true;
+
+            undo.Capture();
 
             cellList.ForEach(c => c.mergeable = true);
             helper.OrderCellsByDirection(direction).ForEach(Move);

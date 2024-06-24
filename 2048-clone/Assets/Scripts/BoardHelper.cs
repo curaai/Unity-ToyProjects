@@ -70,7 +70,7 @@ public class BoardHelper
             return shifts.Where(s =>
             {
                 var x = GetValue(c.cellPos + s);
-                return !x.HasValue || x.Equals(c.value);
+                return x.Equals(0) || x.Equals(c.value);
             }).ToList();
         }
     }
@@ -81,7 +81,7 @@ public class BoardHelper
             return null;
         if (size <= pos.x || size <= pos.y)
             return null;
-        return board.Get(pos)?.value;
+        return board.Get(pos)?.value ?? 0;
     }
 
     public List<Cell> OrderCellsByDirection(Vector2Int direction)
