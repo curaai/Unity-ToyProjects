@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Field : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class Field : MonoBehaviour
 
     private GameObject curFruit;
     private HashSet<Vector2Int> allPosSet = new();
+    public Action gameovered;
 
     private void Start()
     {
@@ -26,7 +29,7 @@ public class Field : MonoBehaviour
     private void GenerateFruit()
     {
         var available = allPosSet.Except(snake.cells.Select(x => x.pos).ToHashSet()).ToList();
-        var pos = (Vector2)available[Random.Range(0, available.Count)];
+        var pos = (Vector2)available[UnityEngine.Random.Range(0, available.Count)];
         curFruit = Instantiate(fruitPrefab, (Vector3)pos, Quaternion.identity);
     }
 
@@ -46,5 +49,11 @@ public class Field : MonoBehaviour
     private void GameOver()
     {
         snake.Stop();
+        gameovered.Invoke();
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
