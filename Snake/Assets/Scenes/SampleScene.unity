@@ -1120,7 +1120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7632036893aae47b4f196e0fa8c96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 8}
+  size: {x: 40, y: 30}
   snake: {fileID: 976882611}
   fruitPrefab: {fileID: 5998620764069465099, guid: f7448042059654642b935197e5ae5641, type: 3}
   curFruit: {fileID: 0}
