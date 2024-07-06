@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Field : MonoBehaviour
@@ -7,10 +9,14 @@ public class Field : MonoBehaviour
     [SerializeField] private GameObject fruitPrefab;
 
     private GameObject curFruit;
+    private HashSet<Vector2Int> allPosSet = new();
 
     private void Start()
     {
         transform.localScale = (Vector2)size;
+        for (int i = -size.x / 2 + 1; i < size.x / 2; i++)
+            for (int j = -size.y / 2 + 1; j < size.y / 2; j++)
+                allPosSet.Add(new Vector2Int(i, j));
 
         snake.collisioned += OnSnakeTrigger;
 
@@ -19,11 +25,9 @@ public class Field : MonoBehaviour
 
     private void GenerateFruit()
     {
-        curFruit = Instantiate(fruitPrefab);
-        curFruit.transform.position = new Vector2(
-            Random.Range(-size.x / 2 + 1, size.x / 2),
-            Random.Range(-size.y / 2 + 1, size.y / 2)
-        );
+        var available = allPosSet.Except(snake.cells.Select(x => x.pos).ToHashSet()).ToList();
+        var pos = (Vector2)available[Random.Range(0, available.Count)];
+        curFruit = Instantiate(fruitPrefab, (Vector3)pos, Quaternion.identity);
     }
 
     private void OnSnakeTrigger(int layer)

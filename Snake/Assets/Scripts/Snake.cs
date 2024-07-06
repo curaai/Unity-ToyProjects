@@ -13,8 +13,8 @@ public class Snake : MonoBehaviour
     private InputManager input;
     private Vector3 dir;
     public Action<int> collisioned;
-    private List<Cell> cells = new();
-    private Vector3 tail;
+    public List<Cell> cells = new();
+    private Vector2Int tail;
 
     private void Start()
     {
@@ -29,11 +29,11 @@ public class Snake : MonoBehaviour
     {
         while (speed > 0)
         {
-            var posList = cells.Select(c => c.transform.position).ToList();
+            var posList = cells.Select(c => c.pos).ToList();
 
             transform.position += dir;
             for (int i = 1; i < cells.Count; i++)
-                cells[i].transform.position = posList[i - 1];
+                cells[i].pos = posList[i - 1];
 
             tail = posList.Last();
 
@@ -45,7 +45,7 @@ public class Snake : MonoBehaviour
     {
         var cell = Instantiate(
             cellPrefab,
-            tail,
+            (Vector2)tail,
             Quaternion.identity,
             transform);
 
