@@ -33,6 +33,7 @@ public class Field : MonoBehaviour
         else if (layer == LayerMask.NameToLayer("Fruit"))
         {
             Destroy(curFruit.gameObject);
+            snake.Grow();
             GenerateFruit();
         }
     }
