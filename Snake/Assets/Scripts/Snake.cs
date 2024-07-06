@@ -10,9 +10,11 @@ public class Snake : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Cell cellPrefab;
 
-    private InputManager input;
-    private Vector3 dir;
     public Action<int> collisioned;
+    public Action moved;
+
+    private InputManager input;
+    private Vector2Int dir;
     public List<Cell> cells = new();
     private Vector2Int tail;
     private RainbowGradient rainbow;
@@ -32,15 +34,22 @@ public class Snake : MonoBehaviour
     {
         while (speed > 0)
         {
+            if (dir == Vector2Int.zero)
+            {
+                yield return null;
+                continue;
+            }
+
             var posList = cells.Select(c => c.pos).ToList();
 
-            transform.position += dir;
+            transform.position += (Vector3)(Vector2)dir;
             for (int i = 1; i < cells.Count; i++)
                 cells[i].pos = posList[i - 1];
 
             tail = posList.Last();
 
             yield return new WaitForSeconds(1 / speed);
+            moved?.Invoke();
         }
     }
 
@@ -68,17 +77,22 @@ public class Snake : MonoBehaviour
         speed = 0;
     }
 
-    private void ChangeDirection(Vector2Int dir)
+    public void ChangeDirection(Vector2Int dir)
     {
         var _dir = Vector2Int.FloorToInt((Vector2)this.dir);
         if (_dir == dir) return;
         if (Vector2.Dot(_dir, dir) == -1) return;
 
-        this.dir = (Vector2)dir;
+        this.dir = dir;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         collisioned.Invoke(other.gameObject.layer);
+    }
+
+    public List<Vector2Int> CellPositions()
+    {
+        return cells.Select(x => x.pos).ToList();
     }
 }

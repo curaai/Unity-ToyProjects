@@ -240,6 +240,52 @@ MonoBehaviour:
   gameoverPanel: {fileID: 1225373282}
   field: {fileID: 2096181649}
   retryBtn: {fileID: 2086717265}
+--- !u!1 &309660909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 309660910}
+  - component: {fileID: 309660911}
+  m_Layer: 0
+  m_Name: AI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &309660910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309660909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1025428313}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &309660911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309660909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a4025e5364f7ff4c83b9a57217d6918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  field: {fileID: 2096181649}
+  snake: {fileID: 976882611}
 --- !u!1 &330053750
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,6 +703,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1025428312
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1025428313}
+  m_Layer: 0
+  m_Name: Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1025428313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025428312}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 309660910}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1225373282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,9 +1108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7632036893aae47b4f196e0fa8c96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 20, y: 15}
+  size: {x: 10, y: 8}
   snake: {fileID: 976882611}
   fruitPrefab: {fileID: 5998620764069465099, guid: f7448042059654642b935197e5ae5641, type: 3}
+  curFruit: {fileID: 0}
 --- !u!1001 &1835902951336756826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1087,7 +1166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9119772091254342292, guid: 257dd79dce2d3f540863ea43db64293c, type: 3}
       propertyPath: speed
-      value: 12
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1103,3 +1182,4 @@ SceneRoots:
   - {fileID: 830812348}
   - {fileID: 2096181648}
   - {fileID: 1835902951336756826}
+  - {fileID: 1025428313}

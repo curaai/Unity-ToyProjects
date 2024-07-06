@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Field : MonoBehaviour
 {
-    [SerializeField] private Vector2Int size;
+    [SerializeField] public Vector2Int size;
     [SerializeField] private Snake snake;
     [SerializeField] private GameObject fruitPrefab;
 
-    private GameObject curFruit;
+    public GameObject curFruit;
     private HashSet<Vector2Int> allPosSet = new();
     public Action gameovered;
 
@@ -28,7 +28,7 @@ public class Field : MonoBehaviour
 
     private void GenerateFruit()
     {
-        var available = allPosSet.Except(snake.cells.Select(x => x.pos).ToHashSet()).ToList();
+        var available = allPosSet.Except(snake.CellPositions().ToHashSet()).ToList();
         var pos = (Vector2)available[UnityEngine.Random.Range(0, available.Count)];
         curFruit = Instantiate(fruitPrefab, (Vector3)pos, Quaternion.identity);
     }
