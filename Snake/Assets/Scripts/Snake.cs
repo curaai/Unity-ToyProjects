@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class Snake : MonoBehaviour
 
     private InputManager input;
     private Vector3 dir;
+    public Action<int> collisioned;
 
     private void Start()
     {
@@ -26,7 +28,7 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void Stop()
+    public void Stop()
     {
         speed = 0;
     }
@@ -41,7 +43,6 @@ public class Snake : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            Stop();
+        collisioned.Invoke(other.gameObject.layer);
     }
 }

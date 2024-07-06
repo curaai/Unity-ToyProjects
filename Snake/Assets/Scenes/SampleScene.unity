@@ -653,8 +653,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2096181648}
+  - component: {fileID: 2096181649}
   m_Layer: 0
-  m_Name: Board
+  m_Name: Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -677,6 +678,21 @@ Transform:
   - {fileID: 999481571}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2096181649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096181646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac7632036893aae47b4f196e0fa8c96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: {x: 40, y: 30}
+  snake: {fileID: 976882611}
+  fruitPrefab: {fileID: 5998620764069465099, guid: f7448042059654642b935197e5ae5641, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
