@@ -14,6 +14,7 @@ public class Snake : MonoBehaviour
     private Vector3 dir;
     public Action<int> collisioned;
     private List<Cell> cells = new();
+    private Vector3 tail;
 
     private void Start()
     {
@@ -34,6 +35,8 @@ public class Snake : MonoBehaviour
             for (int i = 1; i < cells.Count; i++)
                 cells[i].transform.position = posList[i - 1];
 
+            tail = posList.Last();
+
             yield return new WaitForSeconds(1 / speed);
         }
     }
@@ -42,7 +45,7 @@ public class Snake : MonoBehaviour
     {
         var cell = Instantiate(
             cellPrefab,
-            cells.Last().transform.position,
+            tail,
             Quaternion.identity,
             transform);
 
@@ -58,6 +61,7 @@ public class Snake : MonoBehaviour
     {
         var _dir = Vector2Int.FloorToInt((Vector2)this.dir);
         if (_dir == dir) return;
+        if (Vector2.Dot(_dir, dir) == -1) return;
 
         this.dir = (Vector2)dir;
     }
