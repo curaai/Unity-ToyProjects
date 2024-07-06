@@ -15,9 +15,12 @@ public class Snake : MonoBehaviour
     public Action<int> collisioned;
     public List<Cell> cells = new();
     private Vector2Int tail;
+    private RainbowGradient rainbow;
 
     private void Start()
     {
+        rainbow = new();
+
         input = GetComponent<InputManager>();
         input.onInput += ChangeDirection;
         cells.Add(GetComponentInChildren<Cell>());
@@ -50,6 +53,14 @@ public class Snake : MonoBehaviour
             transform);
 
         cells.Add(cell);
+
+        UpdateColors();
+
+        void UpdateColors()
+        {
+            for (int i = 0; i < cells.Count; i++)
+                cells[i].sprite.color = rainbow.Get((float)i / (cells.Count - 1));
+        }
     }
 
     public void Stop()

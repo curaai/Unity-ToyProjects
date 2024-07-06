@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] public SpriteRenderer sprite;
 
     public Vector2Int pos
     {
