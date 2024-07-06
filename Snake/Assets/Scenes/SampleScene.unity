@@ -286,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   field: {fileID: 2096181649}
   snake: {fileID: 976882611}
+  input: {fileID: 976882612}
 --- !u!1 &330053750
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,6 +618,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13b2e4bdd66c53240aa11006adade6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &976882612 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3512668806899759692, guid: 257dd79dce2d3f540863ea43db64293c, type: 3}
+  m_PrefabInstance: {fileID: 1835902951336756826}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e376a149f2632d4fb327650ee3ecf1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &999481570

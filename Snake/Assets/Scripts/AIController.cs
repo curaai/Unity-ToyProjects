@@ -6,18 +6,25 @@ public class AIController : MonoBehaviour
 {
     [SerializeField] private Field field;
     [SerializeField] private Snake snake;
+    [SerializeField] private InputManager input;
 
     private HashSet<Vector2Int> snakeCellsCache;
+    private bool work;
 
     private void Start()
     {
         snake.moved += Do;
-        Invoke("Do", 1f);
+        input.toggleAI += () =>
+        {
+            work = !work;
+            if (work)
+                Do();
+        };
     }
 
     private void Do()
     {
-        if (!enabled) return;
+        if (!work) return;
 
         var dir = Think();
         if (!dir.HasValue) return;
